@@ -1,0 +1,12 @@
+---
+- name: Check if devices match the Gold config
+  hosts: nx
+  gather_facts: no
+
+  tasks:
+  - name: Create local device users
+    nxos_user:
+      aggregate:  "{{ local_users_full }}"
+      state: present
+      purge: yes
+      update_password: on_create

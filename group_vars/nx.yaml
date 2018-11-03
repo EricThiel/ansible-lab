@@ -1,0 +1,37 @@
+#username: admin
+#password: C1sco12345
+
+ansible_connection: network_cli
+ansible_network_os: nxos
+ansible_user: "{{username}}"
+ansible_ssh_pass: "{{password}}"
+
+ansible_remote_user: "{{username}}"
+remote_user: "{{username}}"
+ansible_httpapi_pass: "{{password}}"
+ansible_password: "{{password}}"
+
+#ansible_httpapi_use_ssl: True
+#ansible_httpapi_validate_certs: False
+
+target_version: 9.2(2)
+domain_name: sdlab.cisco.com
+ntp_servers: 
+  - 8.8.8.8
+  - 1.1.1.1
+
+log_servers:
+  - 1.1.1.1
+  - 1.1.1.2
+
+local_users_full:
+  - name: cisco
+    roles: network-admin
+    configured_password: "{{password}}"
+  - name: admin
+    roles: network-admin
+    configured_password: "{{password}}"
+  - name: admin2
+    roles: network-admin
+    configured_password: "{{password}}"
+

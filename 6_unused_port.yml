@@ -1,0 +1,51 @@
+---
+- name: Check if devices match the Gold config
+  hosts: nx
+  gather_facts: no
+
+  tasks:
+  - name: Gather port status
+    nxos_command:
+      commands:
+        - show interface status | json
+    register: if_state
+
+  - name: Set description on access ports
+    nxos_interface: 
+      name: '{{item.interface}}'
+      description: 'Access port - vlan {{item.vlan}}'
+    loop: '{{ if_state.stdout[0].TABLE_interface.ROW_interface  }}'
+    when: 
+      - item.state == 'connected'
+      - "'u' not in item.vlan"
+      - item.name is not defined
+
+  - name: Set description on routed ports
+    nxos_interface: 
+      name: '{{item.interface}}'
+      description: Routed port
+    loop: '{{ if_state.stdout[0].TABLE_interface.ROW_interface  }}'
+    when: 
+      - item.state == 'connected'
+      - item.vlan == 'routed'
+      - item.name is not defined
+
+  - name: Set description on trunk ports
+    nxos_interface: 
+      name: '{{item.interface}}'
+      description: Trunk port
+    loop: '{{ if_state.stdout[0].TABLE_interface.ROW_interface  }}'
+    when: 
+      - item.state == 'connected'
+      - item.vlan == 'trunk'
+      - item.name is not defined
+
+  - name: Set description on unused ports
+    nxos_interface: 
+      name: '{{item.interface}}'
+      description: Unused port
+      admin_state: down
+    loop: '{{ if_state.stdout[0].TABLE_interface.ROW_interface  }}'
+    when: item.state == 'notconnect'
+
+
