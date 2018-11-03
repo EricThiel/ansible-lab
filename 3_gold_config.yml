@@ -16,7 +16,7 @@
   - name: Set domain attributes
     nxos_system:
       domain_lookup: False
-      domain_name: {{domain_name}}
+      domain_name: "{{domain_name}}"
 
   - name: Set standard logging settings
     nxos_logging:
