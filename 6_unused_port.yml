@@ -46,6 +46,8 @@
       description: Unused port
       admin_state: down
     loop: '{{ if_state.stdout[0].TABLE_interface.ROW_interface  }}'
-    when: item.state == 'notconnect'
+    when: 
+      - item.state == 'notconnect'
+      - item.interface|length <= 11
 
 
