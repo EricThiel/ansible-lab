@@ -4,22 +4,11 @@
   gather_facts: no
 
   tasks:
-  - set_fact:
-      #ansible_connection: local
-      ansible_connection: network_cli
-      ansible_network_os: nxos
-
 
   - name: Enable NXAPI access with default configuration
     nxos_nxapi:
       state: present
       enable_http: yes
       enable_https: yes
-
-#  - name: Enable feature nxapi
-#    nxos_feature:
-#      feature: nxapi
-#      state: enabled
-
 
 

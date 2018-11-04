@@ -34,11 +34,6 @@
       - sftp-server
       - interface-vlan
 
-#  - name: Enable sftp-server feature
-#    nxos_feature:
-#      feature: sftp-server
-#      state: enabled
-
   - name: Check VTY and console
     nxos_config:
       lines:
