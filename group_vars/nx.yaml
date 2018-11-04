@@ -14,6 +14,7 @@ ansible_password: "{{password}}"
 #ansible_httpapi_use_ssl: True
 #ansible_httpapi_validate_certs: False
 
+siteid: 51
 target_version: 9.2(2)
 domain_name: sdlab.cisco.com
 ntp_servers: 
@@ -34,4 +35,43 @@ local_users_full:
   - name: admin2
     roles: network-admin
     configured_password: "{{password}}"
+
+tenants:
+  - tenant_name: finance
+    tenant_num: 11
+    segments:
+      - vlan_num: 1
+        name: "{{siteid}}-finance-data"
+        subnet: "10.{{siteid}}.111.0/24"
+      - vlan_num: 2
+        name: "{{siteid}}-finance-voice"
+        subnet: "10.{{siteid}}.112.0/24"
+  - tenant_name: engineering
+    tenant_num: 12
+    segments:
+      - vlan_num: 1
+        name: "{{siteid}}-engineering-data"
+        subnet: "10.{{siteid}}.121.0/24"
+      - vlan_num: 2
+        name: "{{siteid}}-engineering-voice"
+        subnet: "10.{{siteid}}.122.0/24"
+  - tenant_name: hr
+    tenant_num: 13
+    segments:
+      - vlan_num: 1
+        name: "{{siteid}}-hr-data"
+        subnet: "10.{{siteid}}.131.0/24"
+      - vlan_num: 2
+        name: "{{siteid}}-hr-voice"
+        subnet: "10.{{siteid}}.132.0/24"
+  - tenant_name: facilities
+    tenant_num: 14
+    segments:
+      - vlan_num: 1
+        name: "{{siteid}}-facilities-data"
+        subnet: "10.{{siteid}}.141.0/24"
+      - vlan_num: 2
+        name: "{{siteid}}-facilities-voice"
+        subnet: "10.{{siteid}}.142.0/24"
+
 

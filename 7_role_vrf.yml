@@ -1,0 +1,8 @@
+---
+- name: Use roles to create VRFs
+  hosts: nx
+  gather_facts: false
+
+  roles: 
+    - network_vrf
+

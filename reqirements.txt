@@ -1,2 +1,3 @@
 ansible==2.7.1
 scp
+netaddr
