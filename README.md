@@ -155,7 +155,7 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
   * In the first example, we have a simple playbook designed to enable NX-API on an NX-OS switch. 
 
 
-* ```yaml
+  ```yaml
   ---
   - name: Enable NX-API before any other tasks
     hosts: nx
@@ -182,7 +182,7 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
   * In the second example, we have a simple playbook designed to gather information about the switch, and take specific actions based on that information. 
 
 
-* ```yaml
+  ```yaml
   ---
   - name: Gather information about nxos device
     hosts: nx
@@ -241,7 +241,7 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
 * Execute `ansible-playbook 3_gold_config.yml -C -v`
   * For the initial run, we are using `-C -v` to tell ansible to only 'check' the device and report what changes it _would_ do. This is a very important capability when creating new playbooks to test before running them against production devices. 
 
-* ```yaml
+  ```yaml
   ---
   - name: Check if devices match the Gold config
     hosts: nx
