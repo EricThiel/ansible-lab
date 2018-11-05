@@ -77,75 +77,75 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
     
 1. `group_vars/nx.yaml` contains variables that will apply to inventory group `nx`. These variables will be used by our playbooks throughout the workshop.
 
-* ```yaml
-  ansible_connection: network_cli
-  ansible_network_os: nxos
-  ansible_user: "{{username}}"
-  ansible_ssh_pass: "{{password}}"
-  ansible_remote_user: "{{username}}"
-  remote_user: "{{username}}"
-  ansible_httpapi_pass: "{{password}}"
-  ansible_password: "{{password}}"
-  
-  target_version: 9.2(2)
-  domain_name: sdlab.cisco.com
-  ntp_servers: 
-    - 8.8.8.8
-    - 1.1.1.1
-  log_servers:
-    - 1.1.1.1
-    - 1.1.1.2
-  
-  local_users_full:
-    - name: cisco
-    roles: network-admin
-    configured_password: "{{password}}"
-    - name: admin
-    roles: network-admin
-    configured_password: "{{password}}"
-    - name: admin2
-    roles: network-admin
-    configured_password: "{{password}}"
-  
-  siteid: 51
-  tenants:
-    - tenant_name: finance
-    tenant_num: 11
-    segments:
-      - vlan_num: 1
-      name: "{{siteid}}-finance-data"
-      subnet: "10.{{siteid}}.111.0/24"
-      - vlan_num: 2
-      name: "{{siteid}}-finance-voice"
-      subnet: "10.{{siteid}}.112.0/24"
-    - tenant_name: engineering
-    tenant_num: 12
-    segments:
-      - vlan_num: 1
-      name: "{{siteid}}-engineering-data"
-      subnet: "10.{{siteid}}.121.0/24"
-      - vlan_num: 2
-      name: "{{siteid}}-engineering-voice"
-      subnet: "10.{{siteid}}.122.0/24"
-    - tenant_name: hr
-    tenant_num: 13
-    segments:
-      - vlan_num: 1
-      name: "{{siteid}}-hr-data"
-      subnet: "10.{{siteid}}.131.0/24"
-      - vlan_num: 2
-      name: "{{siteid}}-hr-voice"
-      subnet: "10.{{siteid}}.132.0/24"
-    - tenant_name: facilities
-    tenant_num: 14
-    segments:
-      - vlan_num: 1
-      name: "{{siteid}}-facilities-data"
-      subnet: "10.{{siteid}}.141.0/24"
-      - vlan_num: 2
-      name: "{{siteid}}-facilities-voice"
-      subnet: "10.{{siteid}}.142.0/24"
-  ```
+```yaml
+ansible_connection: network_cli
+ansible_network_os: nxos
+ansible_user: "{{username}}"
+ansible_ssh_pass: "{{password}}"
+ansible_remote_user: "{{username}}"
+remote_user: "{{username}}"
+ansible_httpapi_pass: "{{password}}"
+ansible_password: "{{password}}"
+
+target_version: 9.2(2)
+domain_name: sdlab.cisco.com
+ntp_servers: 
+  - 8.8.8.8
+  - 1.1.1.1
+log_servers:
+  - 1.1.1.1
+  - 1.1.1.2
+
+local_users_full:
+  - name: cisco
+  roles: network-admin
+  configured_password: "{{password}}"
+  - name: admin
+  roles: network-admin
+  configured_password: "{{password}}"
+  - name: admin2
+  roles: network-admin
+  configured_password: "{{password}}"
+
+siteid: 51
+tenants:
+  - tenant_name: finance
+  tenant_num: 11
+  segments:
+    - vlan_num: 1
+    name: "{{siteid}}-finance-data"
+    subnet: "10.{{siteid}}.111.0/24"
+    - vlan_num: 2
+    name: "{{siteid}}-finance-voice"
+    subnet: "10.{{siteid}}.112.0/24"
+  - tenant_name: engineering
+  tenant_num: 12
+  segments:
+    - vlan_num: 1
+    name: "{{siteid}}-engineering-data"
+    subnet: "10.{{siteid}}.121.0/24"
+    - vlan_num: 2
+    name: "{{siteid}}-engineering-voice"
+    subnet: "10.{{siteid}}.122.0/24"
+  - tenant_name: hr
+  tenant_num: 13
+  segments:
+    - vlan_num: 1
+    name: "{{siteid}}-hr-data"
+    subnet: "10.{{siteid}}.131.0/24"
+    - vlan_num: 2
+    name: "{{siteid}}-hr-voice"
+    subnet: "10.{{siteid}}.132.0/24"
+  - tenant_name: facilities
+  tenant_num: 14
+  segments:
+    - vlan_num: 1
+    name: "{{siteid}}-facilities-data"
+    subnet: "10.{{siteid}}.141.0/24"
+    - vlan_num: 2
+    name: "{{siteid}}-facilities-voice"
+    subnet: "10.{{siteid}}.142.0/24"
+```
 
 
 # NX OS configurations
