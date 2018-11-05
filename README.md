@@ -326,8 +326,8 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
 1. `- name: Configure VTY and console` - This task will loop over 2 terminal types, vty and console, and apply an exec-timeout to each
 
 1. `parents: "{{ item }}"` - In order to set the exec-timeout on each type of terminal, we must first execute a command to enter that config mode. "parents" allows typing a command before applying the config within the nxos_config module. 
-  * In this case, for loop 1 it will run `line vty` prior to running `exec-timeout 525600`. 
-  * For loop 2, it will run `line console` prior to running `exec-timeout 525600`.
+    * In this case, for loop 1 it will run `line vty` prior to running `exec-timeout 525600`. 
+    * For loop 2, it will run `line console` prior to running `exec-timeout 525600`.
 
 1. `blah` - blah
 
