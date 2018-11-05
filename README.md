@@ -592,7 +592,7 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
     loop: "{{ tenants|subelements('segments') }}"
   ```
 
-1. `blah` - blah
+3. `main.yml` - This task list simply checks the OS of the hosts the role is applied to, and if they are NX-OS it will execute the tasks from nxos.yml
 
 1. `blah` - blah
 
