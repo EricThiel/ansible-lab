@@ -543,7 +543,7 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
     when: ansible_network_os == "nxos" and tenants is defined    
   ```
 
-  * roles/securenetwrk.network_vrf/tasks/main.yml
+  * roles/securenetwrk.network_vrf/tasks/nxos.yml
 
   ```yaml
   ---
@@ -592,7 +592,88 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
     loop: "{{ tenants|subelements('segments') }}"
   ```
 
-3. `main.yml` - This task list simply checks the OS of the hosts the role is applied to, and if they are NX-OS it will execute the tasks from nxos.yml
+3. `main.yml` - This task list simply checks the ansible_network_os of the hosts the role is applied to, and if it is  NX-OS it will execute the tasks from nxos.yml. nxos.yml relies on multiple variables which have been set in group_vars/nx.yaml
+
+  ```yaml
+  siteid: 51
+  tenants:
+    - tenant_name: finance
+      tenant_num: 11
+      segments:
+        - vlan_num: 1
+          name: "{{siteid}}-finance-data"
+          subnet: "10.{{siteid}}.111.0/24"
+        - vlan_num: 2
+          name: "{{siteid}}-finance-voice"
+          subnet: "10.{{siteid}}.112.0/24"
+    - tenant_name: engineering
+      tenant_num: 12
+      segments:
+        - vlan_num: 1
+          name: "{{siteid}}-engineering-data"
+          subnet: "10.{{siteid}}.121.0/24"
+        - vlan_num: 2
+          name: "{{siteid}}-engineering-voice"
+          subnet: "10.{{siteid}}.122.0/24"
+    - tenant_name: hr
+      tenant_num: 13
+      segments:
+        - vlan_num: 1
+          name: "{{siteid}}-hr-data"
+          subnet: "10.{{siteid}}.131.0/24"
+        - vlan_num: 2
+          name: "{{siteid}}-hr-voice"
+          subnet: "10.{{siteid}}.132.0/24"
+    - tenant_name: facilities
+      tenant_num: 14
+      segments:
+        - vlan_num: 1
+          name: "{{siteid}}-facilities-data"
+          subnet: "10.{{siteid}}.141.0/24"
+        - vlan_num: 2
+          name: "{{siteid}}-facilities-voice"
+          subnet: "10.{{siteid}}.142.0/24"
+    ```
+
+1. `tags: [nxapi, vrf]` - Tags can be used to call selective tasks within a playbook without executing the full playbook. 
+
+1. `loop: "{{ tenants|subelements('segments') }}"` - Ansible supports a number of capabilities with loop. In this example, we are looping through the list of 'segments' defined within each 'tenant'. 
+  * Additional documentation on loops available at [docs.ansible.com](https://docs.ansible.com/ansible/latest/user_guide/playbooks_loops.html)
+
+1. `nxos_vlan:` - Our first step will be to create VLANs
+
+1. `vlan_id: "{{item.0.tenant_num}}{{item.1.vlan_num}}"` - When looping through subelements, item.0 represents the top level list (tenants) and item.1 represents the inner values (vlan_num=1, vlan_num=2). In this example we combine the tenant_num from the top level (e.g. 11, 12, 13) with the vlan_num from the subelement (e.g. 1, 2) to form a VLAN Id (e.g. 111, 112, 121, 122). 
+
+1. `name: "{{item.1.name}}"` - For each VLAN, a name is defined in group_vars combining the siteid for that site (e.g. 51) with the intent for the vlan (e.g. finance-data). This name is used as the VLAN name. 
+
+1. `nxos_vrf:` - Our second step will be to create the VRFs
+
+1. `loop: "{{tenants}}"` - This task loops only over the list of tenants, creating one VRF per
+
+1. `vrf: "{{item.tenant_name}}-vrf"` - Create a VRF based on the name of the tenant name (e.g. engineering-vrf)
+
+1. `nxos_interface:` - Our third step will be to create the SVIs for the routed VLANs
+
+1. `name: "Vlan {{item.0.tenant_num}}{{item.1.vlan_num}}"` - Create an SVI interface for each vlan created in step 1. (e.g. Int VLAN111)
+
+1. `nxos_vrf_interface:` - Our fourth step will be to associate each SVI to the appropriate VRF
+
+1. `vrf: "{{item.0.tenant_name}}-vrf"` - Specifiy the VRF to apply 
+
+1. `interface: "vlan{{item.0.tenant_num}}{{item.1.vlan_num}}"` - Loop through all segments, associating each SVI to the appropriate VRF
+
+1. `nxos_l3_interface:` - Our final step will be defining the IP address for each SVI
+
+1. `name: "vlan{{item.0.tenant_num}}{{item.1.vlan_num}}"` - Loop through SVIs one segment at a time
+
+1. `state: present` - Tell Ansible to ensure the defined IP is present
+
+1. `ipv4: "{{ item.1.subnet | ipaddr('1') | ipaddr('address')}}/{{item.1.subnet | ipaddr('prefix') }}"` - Use the `ipaddr` filter to dynamically extract details about the subnet. 
+  * `{{ item.1.subnet | ipaddr('1') | ipaddr('address')}}` uses the subnet defined in nx.yaml (e.g. 10.51.111.0/24) and returns the value of the first usable IP (10.51.111.1)
+  * `{{item.1.subnet | ipaddr('prefix') }}` uses the subnet defined in nx.yaml (e.g. 10.51.111.0/24) and returns the value of the netmask (/24)
+  * the [ipaddr](https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters_ipaddr.html) filter is a very useful tool for turning a subnet definition into specific IPs
+
+1. `blah` - blah
 
 1. `blah` - blah
 
