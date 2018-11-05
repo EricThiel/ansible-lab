@@ -11,43 +11,43 @@
     register: if_state
 
   - name: Set description on access ports
+    loop: '{{ if_state.stdout[0].TABLE_interface.ROW_interface  }}'
+    when: 
+      - item.state == 'connected'
+      - item.name is not defined
+      - "'u' not in item.vlan"
     nxos_interface: 
       name: '{{item.interface}}'
       description: 'Access port - vlan {{item.vlan}}'
+
+  - name: Set description on routed ports
     loop: '{{ if_state.stdout[0].TABLE_interface.ROW_interface  }}'
     when: 
       - item.state == 'connected'
-      - "'u' not in item.vlan"
       - item.name is not defined
-
-  - name: Set description on routed ports
+      - item.vlan == 'routed'
     nxos_interface: 
       name: '{{item.interface}}'
       description: Routed port
+
+  - name: Set description on trunk ports
     loop: '{{ if_state.stdout[0].TABLE_interface.ROW_interface  }}'
     when: 
       - item.state == 'connected'
-      - item.vlan == 'routed'
       - item.name is not defined
-
-  - name: Set description on trunk ports
+      - item.vlan == 'trunk'
     nxos_interface: 
       name: '{{item.interface}}'
       description: Trunk port
-    loop: '{{ if_state.stdout[0].TABLE_interface.ROW_interface  }}'
-    when: 
-      - item.state == 'connected'
-      - item.vlan == 'trunk'
-      - item.name is not defined
 
-  - name: Set description on unused ports
-    nxos_interface: 
-      name: '{{item.interface}}'
-      description: Unused port
-      admin_state: down
+  - name: Set description and shut down unused ports
     loop: '{{ if_state.stdout[0].TABLE_interface.ROW_interface  }}'
     when: 
       - item.state == 'notconnect'
       - item.interface|length <= 11
+    nxos_interface: 
+      name: '{{item.interface}}'
+      description: Unused port
+      admin_state: down
 
 

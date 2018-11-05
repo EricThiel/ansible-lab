@@ -352,7 +352,7 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
      </details>
 
 
-## blah
+## Check if devices have all expected users, and purge any extra users
 * Execute `ansible-playbook 5_users.yml`
   * In this example we will manage local users across all devices. As was demonstrated in the past lab, using `-C -v` to confirm what a playbook like this will do before running in production is always a good idea to avoid unintended consequences.  
 
@@ -393,23 +393,110 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
 1. `update_password: on_create` - This setting tells the module that if the user already exists, do not attempt to change the password. Since the module does not know the current password, this allows for safe creation of new users without potentially changing the password for existing users. 
 
 
-## blah
-* Execute `ansible-playbook `
-  * blah 
+## Set port descriptions on ports, and shut down unused ports
+* Execute `ansible-playbook 6_unused_port.yml`
+  * This playbook is designed to check the current state of ports, and take action based on their state.  
 
   ```yaml
-
+  ---
+  - name: Set port descriptions on ports, and shut down unused ports
+    hosts: nx
+    gather_facts: no
+  
+    tasks:
+    - name: Gather port status
+      nxos_command:
+        commands:
+          - show interface status | json
+      register: if_state
+  
+    - name: Set description on access ports
+      loop: '{{ if_state.stdout[0].TABLE_interface.ROW_interface  }}'
+      when: 
+        - item.state == 'connected'
+        - item.name is not defined
+        - "'u' not in item.vlan"
+      nxos_interface: 
+        name: '{{item.interface}}'
+        description: 'Access port - vlan {{item.vlan}}'
+  
+    - name: Set description on routed ports
+      loop: '{{ if_state.stdout[0].TABLE_interface.ROW_interface  }}'
+      when: 
+        - item.state == 'connected'
+        - item.name is not defined
+        - item.vlan == 'routed'
+      nxos_interface: 
+        name: '{{item.interface}}'
+        description: Routed port
+  
+    - name: Set description on trunk ports
+      loop: '{{ if_state.stdout[0].TABLE_interface.ROW_interface  }}'
+      when: 
+        - item.state == 'connected'
+        - item.name is not defined
+        - item.vlan == 'trunk'
+      nxos_interface: 
+        name: '{{item.interface}}'
+        description: Trunk port
+  
+    - name: Set description and shut down unused ports
+      loop: '{{ if_state.stdout[0].TABLE_interface.ROW_interface  }}'
+      when: 
+        - item.state == 'notconnect'
+        - item.interface|length <= 11
+      nxos_interface: 
+        name: '{{item.interface}}'
+        description: Unused port
+        admin_state: down
 
   ```
-1. `blah` - blah
 
-1. `blah` - blah
+1. `nxos_command:` - The nxos_command module is a catch-all for running non-configuration commands
 
-1. `blah` - blah
+1. `- show interface status | json` - Using the command module, this task executes a show interface status command, with the output formatted in JSON for easier parsing
 
-1. `blah` - blah
+1. `register: if_state` - Store the output of any commands run into the variable `if_state` for later reference
 
-1. `blah` - blah
+1. `- name: Set description on access ports` - This task will use the information gathered above to detect access ports and set a description
+
+1. `loop: '{{ if_state.stdout[0].TABLE_interface.ROW_interface  }}'` - This task will loop over each item within the JSON output stored in if_state. `stdout[0]` refers to the output from the first command in that task, and `TABLE_interface.ROW_interface` is where NX-OS stores the output of the command within JSON. Inside ROW_interface is a list of interfaces and their attributes. 
+
+1. `when:` - We only want to execute each of the following tasks under certain circumstances. When passed a list of conditions, by default the task will require all to be true to execute
+
+1. `item.state == 'connected'` - The next threee tasks should only be run against interfaces that have a state of `connected`
+
+1. `- item.name is not defined` - The next threee tasks should only be run against interfaces that do not already have a description set
+
+1. `- "'u' not in item.vlan"` - This task will only execute if the current 'vlan' does not the letter u. This condition excludes ports that are `routed` or `trunk`, but not ports assigned to a single vlan
+
+1. `nxos_interface:` - This module can set various attributes on an interface on an NX-OS device
+
+1. `name: '{{item.interface}}'` - For each loop, configure the port with the name specified in the 'interface' field of the show interface status output. (e.g. Ethernet1/1, Ethernet1/2)
+
+1. `description: 'Access port - vlan {{item.vlan}}'` - For each interface the task loops over, if the port is an access port, set the description to `Access port - vlan ` followed by the VLAN it is a member of.
+
+1. `- name: Set description on routed ports` - This task will use the information gathered above to detect routed ports and set a description
+
+1. `- item.vlan == 'routed'` - Only execute if the port is in routed mode
+
+1. `description: Routed port` - Set the port description to 'Router port' if not otherwise set
+
+1. `- name: Set description on trunk ports` - This task will use the information gathered above to detect trunk ports and set a description
+
+1. `- item.vlan == 'trunk'` - Only execute if the port is in trunk mode
+
+1. `description: Trunk port` - Set the port description to 'Trunk port' if not otherwise set
+
+1. `- name: Set description and shut down unused ports` - Set description and shut down unused ports
+
+1. `- item.state == 'notconnect'` - Detect if the port is disconnected
+
+1. `- item.interface|length <= 11` - To speed up the playbook for demo purposes, only run on ports with 11 or less characters (skip Ethernetx/yy and Ethernetx/zzz)
+
+1. `description: Unused port` - Set the port description to 'Unused port' if the link is currently down
+
+1. `admin_state: down` - Admin disable any ports currently in down state
 
 
 ## blah
