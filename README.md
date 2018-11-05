@@ -533,7 +533,7 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
 
 1. `- securenetwrk.network_vrf` - Assign the role you just downloaded `securenetwrk.network_vrf` to the hosts in group `nx`. Within that role are two key files. 
 
-  * roles/securenetwrk.network_vrf/tasks/main.yml
+    * roles/securenetwrk.network_vrf/tasks/main.yml
 
   ```yaml
   ---
@@ -543,7 +543,7 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
     when: ansible_network_os == "nxos" and tenants is defined    
   ```
 
-  * roles/securenetwrk.network_vrf/tasks/nxos.yml
+    * roles/securenetwrk.network_vrf/tasks/nxos.yml
 
   ```yaml
   ---
@@ -592,7 +592,7 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
     loop: "{{ tenants|subelements('segments') }}"
   ```
 
-3. `main.yml` - This task list simply checks the ansible_network_os of the hosts the role is applied to, and if it is  NX-OS it will execute the tasks from nxos.yml. nxos.yml relies on multiple variables which have been set in group_vars/nx.yaml
+1. `main.yml` - This task list simply checks the ansible_network_os of the hosts the role is applied to, and if it is  NX-OS it will execute the tasks from nxos.yml. nxos.yml relies on multiple variables which have been set in group_vars/nx.yaml
 
   ```yaml
   siteid: 51
@@ -635,7 +635,7 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
           subnet: "10.{{siteid}}.142.0/24"
   ```
 
-4. `tags: [nxapi, vrf]` - Tags can be used to call selective tasks within a playbook without executing the full playbook. 
+1. `tags: [nxapi, vrf]` - Tags can be used to call selective tasks within a playbook without executing the full playbook. 
 
 1. `loop: "{{ tenants|subelements('segments') }}"` - Ansible supports a number of capabilities with loop. In this example, we are looping through the list of 'segments' defined within each 'tenant'. 
     * Additional documentation on loops available at [docs.ansible.com](https://docs.ansible.com/ansible/latest/user_guide/playbooks_loops.html)
@@ -669,9 +669,9 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
 1. `state: present` - Tell Ansible to ensure the defined IP is present
 
 1. `ipv4: "{{ item.1.subnet | ipaddr('1') | ipaddr('address')}}/{{item.1.subnet | ipaddr('prefix') }}"` - Use the `ipaddr` filter to dynamically extract details about the subnet. 
-  * `{{ item.1.subnet | ipaddr('1') | ipaddr('address')}}` uses the subnet defined in nx.yaml (e.g. 10.51.111.0/24) and returns the value of the first usable IP (10.51.111.1)
-  * `{{item.1.subnet | ipaddr('prefix') }}` uses the subnet defined in nx.yaml (e.g. 10.51.111.0/24) and returns the value of the netmask (/24)
-  * the [ipaddr](https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters_ipaddr.html) filter is a very useful tool for turning a subnet definition into specific IPs
+    * `{{ item.1.subnet | ipaddr('1') | ipaddr('address')}}` uses the subnet defined in nx.yaml (e.g. 10.51.111.0/24) and returns the value of the first usable IP (10.51.111.1)
+    * `{{item.1.subnet | ipaddr('prefix') }}` uses the subnet defined in nx.yaml (e.g. 10.51.111.0/24) and returns the value of the netmask (/24)
+    * the [ipaddr](https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters_ipaddr.html) filter is a very useful tool for turning a subnet definition into specific IPs
 
 1. `blah` - blah
 
