@@ -293,8 +293,13 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
       loop: "{{ ntp_servers }}"
       nxos_config:
         lines:
-          - ntp server {{ item }}
+          - ntp server {{ item }} use-vrf default
   
+    - name: Create temp user
+      when: ansible_network_os == 'nxos'
+      nxos_config:
+        lines:
+          - username deleteme password C1sco12345 role network-admin
   ```
 
 1. `nxos_config:` - The nxos_config module provides a catch-all for configuration changes. For this task, we are using it to ensure several best practice settings are on the device. 
@@ -329,10 +334,96 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
     * In this case, for loop 1 it will run `line vty` prior to running `exec-timeout 525600`. 
     * For loop 2, it will run `line console` prior to running `exec-timeout 525600`.
 
+1. `- name: Set NTP` - Make note in this task the explicit setting of `use-vrf default`. Often the command `ntp server 1.1.1.1` is used, but in the configuration it actually appears with the use-vrf at the end. This is important to include for Ansible so it understands that the configuration is correct. If that was left off in the task, it would always think the configuration had changed and would re-apply the config. 
+
+1. `- name: Create temp user` - This task was created to demonstrate the issue mentioned above. This task creates a user by passing a plain-text password, but when it is stored in the configuration the password is obfuscated. As a result, every run will attempt to re-apply the configuration. Sometimes this can be solved as with ntp above, but often you will have one or more tasks that always believe the config has changed. It is best to group these tasks together so that auditing the results to detect actual config drift is easier. 
+
+* Execute `ansible-playbook 3_gold_config.yml`
+  * This time we left off the `-C -v` so the playbook will execute the defined tasks. 
+  * If you execute it a second time, what do you expect for the results? Try it and see
+     <details>
+     <summary> Answer </summary>
+     * All tasks should show 'ok' except the last task. The last task will show 'changed' every time because it applies the password in plaintext, but the password is stored in the configuration encrypted. 
+     </details>
+  * How could this issue be avoided?
+     <details>
+     <summary> Answer </summary>
+     * If you manually add and capture the configuration from the device, in this case with an encrypted password, you can often use that exact config line on other devices as well. 
+     </details>
+
+
+## blah
+* Execute `blah`
+  * blah 
+
+  ```yaml
+
+
+  ```
+
+
+
+
+1. `blah` - blah
+
 1. `blah` - blah
 
 1. `blah` - blah
 
+1. `blah` - blah
+
+1. `blah` - blah
+
+
+
+
+
+## blah
+* Execute `blah`
+  * blah 
+
+  ```yaml
+
+
+  ```
+1. `blah` - blah
+
+1. `blah` - blah
+
+1. `blah` - blah
+
+1. `blah` - blah
+
+1. `blah` - blah
+
+
+## blah
+* Execute `blah`
+  * blah 
+
+  ```yaml
+
+
+  ```
+1. `blah` - blah
+
+1. `blah` - blah
+
+1. `blah` - blah
+
+1. `blah` - blah
+
+1. `blah` - blah
+
+
+## blah
+* Execute `blah`
+  * blah 
+
+  ```yaml
+
+
+  ```
 1. `blah` - blah
 
 1. `blah` - blah

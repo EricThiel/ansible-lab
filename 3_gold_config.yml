@@ -26,28 +26,35 @@
       state: present
 
   - name: Enable standard features
-    nxos_feature:
-      feature: "{{item}}"
-      state: enabled
     loop:
       - scp-server
       - sftp-server
       - interface-vlan
+    nxos_feature:
+      feature: "{{item}}"
+      state: enabled
 
-  - name: Check VTY and console
+  - name: Configure VTY and console
+    when: ansible_network_os == 'nxos'
+    loop: 
+      - line vty
+      - line console
     nxos_config:
       lines:
         - exec-timeout 525600
       parents: "{{ item }}"
-    loop: 
-      - line vty
-      - line console
-    when: ansible_network_os == 'nxos'
 
   - name: Set NTP
+    when: ansible_network_os == 'nxos'
+    loop: "{{ ntp_servers }}"
     nxos_config:
       lines:
-        - ntp server {{ item }}
-    loop: "{{ ntp_servers }}"
+        - ntp server {{ item }} use-vrf default
+
+  - name: Create temp user
     when: ansible_network_os == 'nxos'
+    nxos_config:
+      lines:
+        - username deleteme password C1sco12345 role network-admin
+
 
