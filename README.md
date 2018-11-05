@@ -147,9 +147,6 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
             subnet: "10.{{siteid}}.142.0/24"
     ```
 
-1. 
-
-
 
 # NX OS configurations
 
@@ -245,58 +242,59 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
   * For the initial run, we are using `-C -v` to tell ansible to only 'check' the device and report what changes it _would_ do. This is a very important capability when creating new playbooks to test before running them against production devices. 
 
 * ```yaml
-      ---
-      - name: Check if devices match the Gold config
-        hosts: nx
-        gather_facts: no
-      
-        tasks:
-        - name: Check gold config status
-          nxos_config:
-            lines:
-              - clock timezone PST 8 0
-              - logging timestamp milliseconds
-              - no ip source-route
-            backup: yes
-          when: ansible_network_os == 'nxos'
-      
-        - name: Set domain attributes
-          nxos_system:
-            domain_lookup: False
-            domain_name: "{{domain_name}}"
-      
-        - name: Set standard logging settings
-          nxos_logging:
-            aggregate:
-              - { dest: console, dest_level: 7 }
-              - { dest: logfile, dest_level: 6, name: mylog }
-            state: present
-      
-        - name: Enable standard features
-          nxos_feature:
-            feature: "{{item}}"
-            state: enabled
-          loop:
-            - scp-server
-            - sftp-server
-            - interface-vlan
-      
-        - name: Check VTY and console
-          nxos_config:
-            lines:
-              - exec-timeout 525600
-            parents: "{{ item }}"
-          loop: 
-            - line vty
-            - line console
-          when: ansible_network_os == 'nxos'
-      
-        - name: Set NTP
-          nxos_config:
-            lines:
-              - ntp server {{ item }}
-          loop: "{{ ntp_servers }}"
-          when: ansible_network_os == 'nxos'
+  ---
+  - name: Check if devices match the Gold config
+    hosts: nx
+    gather_facts: no
+  
+    tasks:
+    - name: Check gold config status
+      nxos_config:
+    lines:
+      - clock timezone PST 8 0
+      - logging timestamp milliseconds
+      - no ip source-route
+    backup: yes
+      when: ansible_network_os == 'nxos'
+  
+    - name: Set domain attributes
+      nxos_system:
+    domain_lookup: False
+    domain_name: "{{domain_name}}"
+  
+    - name: Set standard logging settings
+      nxos_logging:
+    aggregate:
+      - { dest: console, dest_level: 7 }
+      - { dest: logfile, dest_level: 6, name: mylog }
+    state: present
+  
+    - name: Enable standard features
+      nxos_feature:
+    feature: "{{item}}"
+    state: enabled
+      loop:
+    - scp-server
+    - sftp-server
+    - interface-vlan
+  
+    - name: Check VTY and console
+      nxos_config:
+    lines:
+      - exec-timeout 525600
+    parents: "{{ item }}"
+      loop: 
+    - line vty
+    - line console
+      when: ansible_network_os == 'nxos'
+  
+    - name: Set NTP
+      nxos_config:
+    lines:
+      - ntp server {{ item }}
+      loop: "{{ ntp_servers }}"
+      when: ansible_network_os == 'nxos'
 
-    ```
+  
+      ```
 
