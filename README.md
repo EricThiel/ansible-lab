@@ -1,5 +1,15 @@
 # Hands On - Ansible for Network Work Management
 
+# Index:
+* [Setup and Preparation](https://github.com/securenetwrk/ansible-lab#setup-and-preparation)
+* [Intro](https://github.com/securenetwrk/ansible-lab#intro)
+* [NX OS configurations](https://github.com/securenetwrk/ansible-lab#nx-os-configurations)
+  * [Enable NX-API](https://github.com/securenetwrk/ansible-lab#enable-nx-api)
+  * [Gather information, upload new 'os' if current is out of date](https://github.com/securenetwrk/ansible-lab#gather-information-upload-new-os-if-current-is-out-of-date)
+  * [Review target devices for gold config compliance](https://github.com/securenetwrk/ansible-lab#review-target-devices-for-gold-config-compliance)
+  * [Check if devices have all expected users, and purge any extra users](https://github.com/securenetwrk/ansible-lab#check-if-devices-have-all-expected-users-and-purge-any-extra-users)
+  * [Set port descriptions on ports, and shut down unused ports](https://github.com/securenetwrk/ansible-lab#set-port-descriptions-on-ports-and-shut-down-unused-ports)
+  * [Use roles to create VRFs](https://github.com/securenetwrk/ansible-lab#use-roles-to-create-vrfs)
 
 # Setup and Preparation
 ## Devnet Sandbox
