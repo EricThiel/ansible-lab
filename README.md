@@ -11,6 +11,8 @@
   * [Set port descriptions on ports, and shut down unused ports](https://github.com/securenetwrk/ansible-lab#set-port-descriptions-on-ports-and-shut-down-unused-ports)
   * [Use roles to create VRFs](https://github.com/securenetwrk/ansible-lab#use-roles-to-create-vrfs)
 
+---
+
 # Setup and Preparation
 ## Devnet Sandbox
 This lab was written to be run using the [DevNet Open NX-OS with Nexus 9K Sandbox](https://devnetsandbox.cisco.com/RM/Diagram/Index/0e22761d-f813-415d-a557-24fa0e17ab50?diagramType=Topology).  This sandbox is a basic CentOS 7 workstation with typical development tools and software installed.  Specifically used in this lab are Python 3.6 and a Nexus 9kv virtual switch. 
@@ -51,6 +53,7 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
 
 1. Now that you have your requirements set, let's review some of what has been set up.
  
+---
 
 # Intro
 
@@ -157,6 +160,7 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
             subnet: "10.{{siteid}}.142.0/24"
     ```
 
+---
 
 # NX OS configurations
 
