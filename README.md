@@ -545,52 +545,52 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
 
     * roles/securenetwrk.network_vrf/tasks/nxos.yml
 
-  ```yaml
-  ---
-  ############################################################
-  #  VLAN Configuration
-  ############################################################
-  
-  - name: Configure VLANs as defined for tenants
-    tags: [nxapi, vrf]
-    nxos_vlan:
-      vlan_id: "{{item.0.tenant_num}}{{item.1.vlan_num}}"
-      name: "{{item.1.name}}"
-      state: present
-    loop: "{{ tenants|subelements('segments') }}"
-  
-  #############################################################
-  # VRF Configuration
-  #############################################################
-  
-  - name: ensure VRF are created
-    nxos_vrf:
-      vrf: "{{item.tenant_name}}-vrf"
-      state: present
-    loop: "{{tenants}}"
-  
-  - name: Create VLAN interface
-    nxos_interface:
-      name: "Vlan {{item.0.tenant_num}}{{item.1.vlan_num}}"
-    loop: "{{ tenants|subelements('segments') }}"
-  
-  - name: Assign interfaces to VRF
-    nxos_vrf_interface:
-      vrf: "{{item.0.tenant_name}}-vrf"
-      interface: "vlan{{item.0.tenant_num}}{{item.1.vlan_num}}"
-    loop: "{{ tenants|subelements('segments') }}"
-  
-  #############################################################
-  # Layer 3 Configuration
-  #############################################################
-  
-  - name: Ensure ip address is configured on Interfaces
-    nxos_l3_interface:
-      name: "vlan{{item.0.tenant_num}}{{item.1.vlan_num}}"
-      state: present
-      ipv4: "{{ item.1.subnet | ipaddr('1') | ipaddr('address')}}/{{item.1.subnet | ipaddr('prefix') }}"
-    loop: "{{ tenants|subelements('segments') }}"
-  ```
+    ```yaml
+    ---
+    ############################################################
+    #  VLAN Configuration
+    ############################################################
+    
+    - name: Configure VLANs as defined for tenants
+      tags: [nxapi, vrf]
+      nxos_vlan:
+        vlan_id: "{{item.0.tenant_num}}{{item.1.vlan_num}}"
+        name: "{{item.1.name}}"
+        state: present
+      loop: "{{ tenants|subelements('segments') }}"
+    
+    #############################################################
+    # VRF Configuration
+    #############################################################
+    
+    - name: ensure VRF are created
+      nxos_vrf:
+        vrf: "{{item.tenant_name}}-vrf"
+        state: present
+      loop: "{{tenants}}"
+    
+    - name: Create VLAN interface
+      nxos_interface:
+        name: "Vlan {{item.0.tenant_num}}{{item.1.vlan_num}}"
+      loop: "{{ tenants|subelements('segments') }}"
+    
+    - name: Assign interfaces to VRF
+      nxos_vrf_interface:
+        vrf: "{{item.0.tenant_name}}-vrf"
+        interface: "vlan{{item.0.tenant_num}}{{item.1.vlan_num}}"
+      loop: "{{ tenants|subelements('segments') }}"
+    
+    #############################################################
+    # Layer 3 Configuration
+    #############################################################
+    
+    - name: Ensure ip address is configured on Interfaces
+      nxos_l3_interface:
+        name: "vlan{{item.0.tenant_num}}{{item.1.vlan_num}}"
+        state: present
+        ipv4: "{{ item.1.subnet | ipaddr('1') | ipaddr('address')}}/{{item.1.subnet | ipaddr('prefix') }}"
+      loop: "{{ tenants|subelements('segments') }}"
+    ```
 
 1. `main.yml` - This task list simply checks the ansible_network_os of the hosts the role is applied to, and if it is  NX-OS it will execute the tasks from nxos.yml. nxos.yml relies on multiple variables which have been set in group_vars/nx.yaml
 
