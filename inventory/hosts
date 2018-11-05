@@ -5,5 +5,5 @@ ansible_python_interpreter="/usr/bin/env python"
 127.0.0.1 
 
 [nx]
-#10.10.20.58 username=admin password=Cisco123
+10.10.20.58 username=admin password=Cisco123
 #sbx-nxos-mgmt.cisco.com ansible_user=admin ansible_pass=Admin_1234! 
