@@ -250,51 +250,63 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
     tasks:
     - name: Check gold config status
       nxos_config:
-    lines:
-      - clock timezone PST 8 0
-      - logging timestamp milliseconds
-      - no ip source-route
-    backup: yes
+        lines:
+          - clock timezone PST 8 0
+          - logging timestamp milliseconds
+          - no ip source-route
+        backup: yes
       when: ansible_network_os == 'nxos'
   
     - name: Set domain attributes
       nxos_system:
-    domain_lookup: False
-    domain_name: "{{domain_name}}"
+        domain_lookup: False
+        domain_name: "{{domain_name}}"
   
     - name: Set standard logging settings
       nxos_logging:
-    aggregate:
-      - { dest: console, dest_level: 7 }
-      - { dest: logfile, dest_level: 6, name: mylog }
-    state: present
+        aggregate:
+          - { dest: console, dest_level: 7 }
+          - { dest: logfile, dest_level: 6, name: mylog }
+        state: present
   
     - name: Enable standard features
       nxos_feature:
-    feature: "{{item}}"
-    state: enabled
+        feature: "{{item}}"
+        state: enabled
       loop:
-    - scp-server
-    - sftp-server
-    - interface-vlan
+        - scp-server
+        - sftp-server
+        - interface-vlan
   
     - name: Check VTY and console
       nxos_config:
-    lines:
-      - exec-timeout 525600
-    parents: "{{ item }}"
+        lines:
+          - exec-timeout 525600
+        parents: "{{ item }}"
       loop: 
-    - line vty
-    - line console
+        - line vty
+        - line console
       when: ansible_network_os == 'nxos'
   
     - name: Set NTP
       nxos_config:
-    lines:
-      - ntp server {{ item }}
+        lines:
+          - ntp server {{ item }}
       loop: "{{ ntp_servers }}"
       when: ansible_network_os == 'nxos'
-
   
   ```
+
+1. `gather_facts: no` - For networking equipment we generally want to skip the built in fact checker, and call a device-specific one as a task. 
+
+1. `blah` - blah
+
+1. `blah` - blah
+
+1. `blah` - blah
+
+1. `blah` - blah
+
+1. `blah` - blah
+
 
