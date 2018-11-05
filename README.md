@@ -167,9 +167,9 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
 
     - name: Enable NXAPI access with default configuration
       nxos_nxapi:
-    state: present
-    enable_http: yes
-    enable_https: yes
+        state: present
+        enable_http: yes
+        enable_https: yes
   ```
 
 1. `hosts: nx` - This line tells Ansible to target all hosts defined in the "nx" group in the inventory file. 
@@ -197,7 +197,7 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
     - name: Gather facts (ops)
       when: ansible_network_os == 'nxos'
       nxos_facts:
-    gather_subset: all
+        gather_subset: all
   
     - name: Version is too old
       when: ansible_net_version < target_version
@@ -214,8 +214,8 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
     - name: Copy correct NXOS binary to switch if version is not correct
       when: ansible_net_version != target_version
       nxos_file_copy: 
-    local_file: "./9.2.2.txt"
-    remote_file: "9.2.2.txt"
+        local_file: "./9.2.2.txt"
+        remote_file: "9.2.2.txt"
   ```
 
 1. `gather_facts: no` - For networking equipment we generally want to skip the built in fact checker, and call a device-specific one as a task. 
@@ -696,5 +696,6 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
 1. `blah` - blah
 
 1. `blah` - blah
+
 
 --->
