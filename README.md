@@ -535,13 +535,13 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
 
     * roles/securenetwrk.network_vrf/tasks/main.yml
 
-  ```yaml
-  ---
-  # tasks file for network_vrf
-  - name: NX-OS Devices
-    include_tasks: nxos.yml
-    when: ansible_network_os == "nxos" and tenants is defined    
-  ```
+    ```yaml
+    ---
+    # tasks file for network_vrf
+    - name: NX-OS Devices
+      include_tasks: nxos.yml
+      when: ansible_network_os == "nxos" and tenants is defined    
+    ```
 
     * roles/securenetwrk.network_vrf/tasks/nxos.yml
 
