@@ -671,15 +671,12 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
 1. `ipv4: "{{ item.1.subnet | ipaddr('1') | ipaddr('address')}}/{{item.1.subnet | ipaddr('prefix') }}"` - Use the `ipaddr` filter to dynamically extract details about the subnet. 
     * `{{ item.1.subnet | ipaddr('1') | ipaddr('address')}}` uses the subnet defined in nx.yaml (e.g. 10.51.111.0/24) and returns the value of the first usable IP (10.51.111.1)
     * `{{item.1.subnet | ipaddr('prefix') }}` uses the subnet defined in nx.yaml (e.g. 10.51.111.0/24) and returns the value of the netmask (/24)
-    * the [ipaddr](https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters_ipaddr.html) filter is a very useful tool for turning a subnet definition into specific IPs
-
-1. `blah` - blah
-
-1. `blah` - blah
-
-1. `blah` - blah
+    * The [ipaddr filter](https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters_ipaddr.html) is a very useful tool for turning a subnet definition into specific IPs. 
 
 
+
+
+<!---
 ## blah
 ---
 * Execute `ansible-playbook `
@@ -700,4 +697,4 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
 
 1. `blah` - blah
 
-
+--->
