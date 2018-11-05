@@ -6,24 +6,24 @@
   tasks:
 
   - name: Gather facts (ops)
+    when: ansible_network_os == 'nxos'
     nxos_facts:
       gather_subset: all
-    when: ansible_network_os == 'nxos'
       
   - name: Version is too old
-    debug: msg="Version {{ansible_net_version}} is older than {{target_version}}"
     when: ansible_net_version < target_version
+    debug: msg="Version {{ansible_net_version}} is older than {{target_version}}"
 
   - name: Version is too new
-    debug: msg="Version {{ansible_net_version}} is newer than {{target_version}}"
     when: ansible_net_version > target_version
+    debug: msg="Version {{ansible_net_version}} is newer than {{target_version}}"
 
   - name: Display current OS version
-    debug: msg="Version {{ansible_net_version}} is already at current target version"
     when: ansible_net_version == target_version
+    debug: msg="Version {{ansible_net_version}} is already at current target version"
 
   - name: Copy correct NXOS binary to switch if version is not correct
+    when: ansible_net_version != target_version
     nxos_file_copy: 
       local_file: "./9.2.2.txt"
       remote_file: "9.2.2.txt"
-    when: ansible_net_version != target_version
