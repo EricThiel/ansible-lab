@@ -638,7 +638,7 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
 4. `tags: [nxapi, vrf]` - Tags can be used to call selective tasks within a playbook without executing the full playbook. 
 
 1. `loop: "{{ tenants|subelements('segments') }}"` - Ansible supports a number of capabilities with loop. In this example, we are looping through the list of 'segments' defined within each 'tenant'. 
-  * Additional documentation on loops available at [docs.ansible.com](https://docs.ansible.com/ansible/latest/user_guide/playbooks_loops.html)
+    * Additional documentation on loops available at [docs.ansible.com](https://docs.ansible.com/ansible/latest/user_guide/playbooks_loops.html)
 
 1. `nxos_vlan:` - Our first step will be to create VLANs
 
