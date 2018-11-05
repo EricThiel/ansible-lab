@@ -532,7 +532,9 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
 1. `roles:` - Instead of defining specific tasks, this playbook will assign roles to the hosts defined with `hosts:`
 
 1. `- securenetwrk.network_vrf` - Assign the role you just downloaded `securenetwrk.network_vrf` to the hosts in group `nx`. Within that role are two key files. 
+
   * roles/securenetwrk.network_vrf/tasks/main.yml
+
   ```yaml
   ---
   # tasks file for network_vrf
@@ -540,10 +542,11 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
     include_tasks: nxos.yml
     when: ansible_network_os == "nxos" and tenants is defined    
   ```
+
   * roles/securenetwrk.network_vrf/tasks/main.yml
+
   ```yaml
   ---
-    
   ############################################################
   #  VLAN Configuration
   ############################################################
