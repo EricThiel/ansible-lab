@@ -151,7 +151,9 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
 # NX OS configurations
 
 ## Enable NX-API
+---
 * Execute `ansible-playbook 1_nxapi.yml`
+---
   * In the first example, we have a simple playbook designed to enable NX-API on an NX-OS switch. 
 
 
@@ -178,7 +180,9 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
 
 
 ## Gather information, upload new 'os' if current is out of date
+---
 * Execute `ansible-playbook 2_sh_facts.yml`
+---
   * In the second example, we have a simple playbook designed to gather information about the switch, and take specific actions based on that information. 
 
 
@@ -238,7 +242,9 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
 
 
 ## Review target devices for gold config compliance
+---
 * Execute `ansible-playbook 3_gold_config.yml -C -v`
+---
   * For the initial run, we are using `-C -v` to tell ansible to only 'check' the device and report what changes it _would_ do. This is a very important capability when creating new playbooks to test before running them against production devices. 
 
   ```yaml
@@ -338,7 +344,9 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
 
 1. `- name: Create temp user` - This task was created to demonstrate the issue mentioned above. This task creates a user by passing a plain-text password, but when it is stored in the configuration the password is obfuscated. As a result, every run will attempt to re-apply the configuration. Sometimes this can be solved as with ntp above, but often you will have one or more tasks that always believe the config has changed. It is best to group these tasks together so that auditing the results to detect actual config drift is easier. 
 
+---
 * Execute `ansible-playbook 3_gold_config.yml` again
+---
   * This time we left off the `-C -v` so the playbook will execute the defined tasks. 
   * If you execute it a second time, what do you expect for the results? Try it and verify
      <details>
@@ -353,7 +361,9 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
 
 
 ## Check if devices have all expected users, and purge any extra users
+---
 * Execute `ansible-playbook 5_users.yml`
+---
   * In this example we will manage local users across all devices. As was demonstrated in the past lab, using `-C -v` to confirm what a playbook like this will do before running in production is always a good idea to avoid unintended consequences.  
 
   ```yaml
@@ -394,7 +404,9 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
 
 
 ## Set port descriptions on ports, and shut down unused ports
+---
 * Execute `ansible-playbook 6_unused_port.yml`
+---
   * This playbook is designed to check the current state of ports, and take action based on their state.  
 
   ```yaml
@@ -529,7 +541,9 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
 
 
 ## blah
+---
 * Execute `ansible-playbook `
+---
   * blah 
 
   ```yaml
