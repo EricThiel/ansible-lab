@@ -503,7 +503,9 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
 * We will now look at leveraging Ansible roles created by someone else to accomplish common tasks. We will start with a basic VRF role
   * Browse to [Ansible Galaxy](http://galaxy.ansible.com) and see the existing roles that you can choose from. Any of these roles can be downloaded with the `ansible-galaxy` command
   * In the left nav bar, click on search, and search for `network_vrf`. Within that role Read Me, you can see details about supported versions, sample playbooks, and a list of variables supported. There is also a link to the GitHub repo if you have suggestions or issues to submit.
-#### On your jump host, execute `ansible-galaxy install securenetwrk.network_vrf -p roles/` to download the role to your local host
+---
+* On your jump host, execute `ansible-galaxy install securenetwrk.network_vrf -p roles/` to download the role to your local host
+---
 
   ```yaml
   ---
