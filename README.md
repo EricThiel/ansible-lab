@@ -338,9 +338,9 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
 
 1. `- name: Create temp user` - This task was created to demonstrate the issue mentioned above. This task creates a user by passing a plain-text password, but when it is stored in the configuration the password is obfuscated. As a result, every run will attempt to re-apply the configuration. Sometimes this can be solved as with ntp above, but often you will have one or more tasks that always believe the config has changed. It is best to group these tasks together so that auditing the results to detect actual config drift is easier. 
 
-* Execute `ansible-playbook 3_gold_config.yml`
+* Execute `ansible-playbook 3_gold_config.yml` again
   * This time we left off the `-C -v` so the playbook will execute the defined tasks. 
-  * If you execute it a second time, what do you expect for the results? Try it and see
+  * If you execute it a second time, what do you expect for the results? Try it and verify
      <details>
      <summary> Answer </summary>
      * All tasks should show 'ok' except the last task. The last task will show 'changed' every time because it applies the password in plaintext, but the password is stored in the configuration encrypted. 
@@ -353,52 +353,48 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
 
 
 ## blah
-* Execute `blah`
-  * blah 
+* Execute `ansible-playbook 5_users.yml`
+  * In this example we will manage local users across all devices. As was demonstrated in the past lab, using `-C -v` to confirm what a playbook like this will do before running in production is always a good idea to avoid unintended consequences.  
 
   ```yaml
-
-
+  ---
+  - name: Check if devices have all expected users, and purge any extra users
+    hosts: nx
+    gather_facts: no
+  
+    tasks:
+    - name: Create local device users
+      nxos_user:
+        aggregate:  "{{ local_users_full }}"
+        state: present
+        purge: yes
+        update_password: on_create
   ```
 
+1. `nxos_user:` - This module is exclusively for managing local user accounts on NX-OS devices
 
+1. `aggregate:  "{{ local_users_full }}"` - In this instance, we are passing in a variable that contains attributes for multiple users. If you look at `group_vars/nx.yaml` you will see a section that looks like the following which lists multiple users, their role, and their password, which is enough for the module to add any missing users:
 
+  ```yaml
+  local_users_full:
+    - name: cisco
+      roles: network-admin
+      configured_password: "{{password}}"
+    - name: admin
+      roles: network-admin
+      configured_password: "{{password}}"
+    - name: admin2
+      roles: network-admin
+      configured_password: "{{password}}"
+  ```
 
-1. `blah` - blah
+1. `purge: yes` - The purge parameter tells the module that the list of users passed in with aggregate is complete, and any additional users found on any device should be removed.  
 
-1. `blah` - blah
-
-1. `blah` - blah
-
-1. `blah` - blah
-
-1. `blah` - blah
-
-
-
+1. `update_password: on_create` - This setting tells the module that if the user already exists, do not attempt to change the password. Since the module does not know the current password, this allows for safe creation of new users without potentially changing the password for existing users. 
 
 
 ## blah
-* Execute `blah`
-  * blah 
-
-  ```yaml
-
-
-  ```
-1. `blah` - blah
-
-1. `blah` - blah
-
-1. `blah` - blah
-
-1. `blah` - blah
-
-1. `blah` - blah
-
-
-## blah
-* Execute `blah`
+* Execute `ansible-playbook `
   * blah 
 
   ```yaml
@@ -417,7 +413,26 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
 
 
 ## blah
-* Execute `blah`
+* Execute `ansible-playbook `
+  * blah 
+
+  ```yaml
+
+
+  ```
+1. `blah` - blah
+
+1. `blah` - blah
+
+1. `blah` - blah
+
+1. `blah` - blah
+
+1. `blah` - blah
+
+
+## blah
+* Execute `ansible-playbook `
   * blah 
 
   ```yaml

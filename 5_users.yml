@@ -1,5 +1,5 @@
 ---
-- name: Check if devices match the Gold config
+- name: Check if devices have all expected users, and purge any extra users
   hosts: nx
   gather_facts: no
 
