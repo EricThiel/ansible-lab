@@ -270,34 +270,68 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
         state: present
   
     - name: Enable standard features
-      nxos_feature:
-        feature: "{{item}}"
-        state: enabled
       loop:
         - scp-server
         - sftp-server
         - interface-vlan
+      nxos_feature:
+        feature: "{{item}}"
+        state: enabled
   
-    - name: Check VTY and console
+    - name: Configure VTY and console
+      when: ansible_network_os == 'nxos'
+      loop: 
+        - line vty
+        - line console
       nxos_config:
         lines:
           - exec-timeout 525600
         parents: "{{ item }}"
-      loop: 
-        - line vty
-        - line console
-      when: ansible_network_os == 'nxos'
   
     - name: Set NTP
+      when: ansible_network_os == 'nxos'
+      loop: "{{ ntp_servers }}"
       nxos_config:
         lines:
           - ntp server {{ item }}
-      loop: "{{ ntp_servers }}"
-      when: ansible_network_os == 'nxos'
   
   ```
 
-1. `gather_facts: no` - For networking equipment we generally want to skip the built in fact checker, and call a device-specific one as a task. 
+1. `nxos_config:` - The nxos_config module provides a catch-all for configuration changes. For this task, we are using it to ensure several best practice settings are on the device. 
+
+1. `lines:` - nxos_config expects one or more lines of configuration to be passed to it. For this task we pass a list with multiple configuration lines
+
+1. `backup: yes` - nxos_config supports saving a local copy of the configuration when executing. This is a good way to document before and after state for your playbook. 
+
+1. `nxos_system:` - The nxos_system module can be used to set system-level attributes. In this task, we are setting dns related system attributes. 
+
+1. `domain_name: "{{domain_name}}"` - Using the nxos_system module, and the `domain_name` variable which could be set universally, per group, or per host, we set the system's lookup domain name. If `domain_name` is not set the play will fail. 
+
+1. `nxos_logging:` - The nxos_logging module is used to set attributes for the system logging facility. 
+
+1. `aggregate:` - Many modules support passing in an "aggregate", which is a sequence or mapping containing multiple attributes. This is much more efficient when creating or modifying multiple items with different parameters 
+
+1. `- { dest: console, dest_level: 7 }` - Inform the nxos_logging module that console logging should be set to level 7 messages.
+
+1. `- { dest: logfile, dest_level: 6, name: mylog }` - Inform the nxos_logging module that file logging should be set to use file name 'mylog' and capture level 6 messages. 
+
+1. `state: present` - For most modules, a state must be set. If 'present', Ansible will ensure the configuration exists. If 'absent', it will make sure the configuration is removed. 
+
+1. `loop:` - loop is a powerful mechanism within Ansible to iterate over sequences or mappings and execute the task multiple times. When iterating over a sequence, each loop the variable `item` will contain the current sequence item. For this example, the task will loop 3 times, each time enabling one of the features listed under the loop parameter.
+
+1. `nxos_feature:` - The nxos_feature module is used to manage the enabled features on an nxos device. 
+
+1. `feature: "{{item}}"` - For loop number one, this will tell nxos_feature to enable scp-server, for loop two it will enable sftp-server, and for loop 3 it will enable interface-vlan. 
+
+1. `- name: Configure VTY and console` - This task will loop over 2 terminal types, vty and console, and apply an exec-timeout to each
+
+1. `parents: "{{ item }}"` - In order to set the exec-timeout on each type of terminal, we must first execute a command to enter that config mode. "parents" allows typing a command before applying the config within the nxos_config module. 
+  * In this case, for loop 1 it will run `line vty` prior to running `exec-timeout 525600`. 
+  * For loop 2, it will run `line console` prior to running `exec-timeout 525600`.
+
+1. `blah` - blah
+
+1. `blah` - blah
 
 1. `blah` - blah
 
