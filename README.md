@@ -162,7 +162,7 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
 
 ## Enable NX-API
 ---
-* Execute `ansible-playbook 1_nxapi.yml`
+* Execute `ansible-playbook 1_nxapi.yml -v`
 ---
   * In the first example, we have a simple playbook designed to enable NX-API on an NX-OS switch. 
 
@@ -181,6 +181,8 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
         enable_http: yes
         enable_https: yes
   ```
+
+1. `-v` - Adding -v to the command line tells Ansible to show slightly more verbose output. For nxos, that includes showing the details of what commands will be executed on the box. You can add up to 4 vs with -vvvv, with each v increasing the amount of output shown. 
 
 1. `hosts: nx` - This line tells Ansible to target all hosts defined in the "nx" group in the inventory file. 
 
@@ -527,6 +529,8 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
   * In the left nav bar, click on search, and search for `network_vrf`. Within that role Read Me, you can see details about supported versions, sample playbooks, and a list of variables supported. There is also a link to the GitHub repo if you have suggestions or issues to submit.
 ---
 * On your jump host, execute `ansible-galaxy install securenetwrk.network_vrf -p roles/` to download the role to your local host
+* Execute `ansible-playbook 7_role_vrf.yml`
+
 ---
 
   ```yaml
