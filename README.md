@@ -557,6 +557,8 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
       when: ansible_network_os == "nxos" and tenants is defined    
     ```
 
+1. `main.yml` - This task list simply checks the ansible_network_os of the hosts the role is applied to, and if it is  NX-OS it will execute the tasks from nxos.yml. nxos.yml relies on multiple variables which have been set in group_vars/nx.yaml
+
     * roles/securenetwrk.network_vrf/tasks/nxos.yml
 
     ```yaml
@@ -605,8 +607,6 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
         ipv4: "{{ item.1.subnet | ipaddr('1') | ipaddr('address')}}/{{item.1.subnet | ipaddr('prefix') }}"
       loop: "{{ tenants|subelements('segments') }}"
     ```
-
-1. `main.yml` - This task list simply checks the ansible_network_os of the hosts the role is applied to, and if it is  NX-OS it will execute the tasks from nxos.yml. nxos.yml relies on multiple variables which have been set in group_vars/nx.yaml
 
     ```yaml
     siteid: 51
