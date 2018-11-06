@@ -95,10 +95,6 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
     ansible_network_os: nxos
     ansible_user: "{{username}}"
     ansible_ssh_pass: "{{password}}"
-    ansible_remote_user: "{{username}}"
-    remote_user: "{{username}}"
-    ansible_httpapi_pass: "{{password}}"
-    ansible_password: "{{password}}"
     
     target_version: 9.2(2)
     domain_name: sdlab.cisco.com
@@ -228,7 +224,7 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
     - name: Copy correct NXOS binary to switch if version is not correct
       when: ansible_net_version != target_version
       nxos_file_copy: 
-        local_file: "./9.2.2.txt"
+        local_file: "9.2.2.txt"
         remote_file: "9.2.2.txt"
   ```
 
@@ -250,7 +246,7 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
 
 1. `nxos_file_copy:` - This module can copy files to an NXOS device filesystem using SCP
 
-1. `local_file: "./9.2.2.txt"` - Specify the local file to copy to the device. For demo purposes we are using a "fake" NX OS binary to save time on the copy.  
+1. `local_file: "9.2.2.txt"` - Specify the local file to copy to the device. For demo purposes we are using a "fake" NX OS binary to save time on the copy.  
 
 1. `remote_file: "9.2.2.txt"` - Specify the target file name on the device bootflash. 
 

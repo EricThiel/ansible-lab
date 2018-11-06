@@ -2,10 +2,6 @@ ansible_connection: network_cli
 ansible_network_os: nxos
 ansible_user: "{{username}}"
 ansible_ssh_pass: "{{password}}"
-ansible_remote_user: "{{username}}"
-remote_user: "{{username}}"
-ansible_httpapi_pass: "{{password}}"
-ansible_password: "{{password}}"
 
 target_version: 9.2(2)
 domain_name: sdlab.cisco.com
