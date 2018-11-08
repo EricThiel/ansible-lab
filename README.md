@@ -488,9 +488,9 @@ If you are doing this lab on your own, you'll need to reserve an instance of thi
 
 1. `when:` - We only want to execute each of the following tasks under certain circumstances. When passed a list of conditions, by default the task will require all to be true to execute
 
-1. `item.state == 'connected'` - The next threee tasks should only be run against interfaces that have a state of `connected`
+1. `item.state == 'connected'` - The next three tasks should only be run against interfaces that have a state of `connected`
 
-1. `- item.name is not defined` - The next threee tasks should only be run against interfaces that do not already have a description set
+1. `- item.name is not defined` - The next three tasks should only be run against interfaces that do not already have a description set
 
 1. `- "'u' not in item.vlan"` - This task will only execute if the current 'vlan' does not the letter u. This condition excludes ports that are `routed` or `trunk`, but not ports assigned to a single vlan
 

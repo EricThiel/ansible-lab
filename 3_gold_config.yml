@@ -55,6 +55,6 @@
     when: ansible_network_os == 'nxos'
     nxos_config:
       lines:
-        - username deleteme password C1sco12345 role network-admin
+        - username deleteme password C1s462342fd role network-admin
 
 
